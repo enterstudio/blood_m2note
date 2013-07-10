@@ -512,3 +512,13 @@ config MEMCG_ZNDSWAP
 	  Memcg with 2ndswap can help kernel to identify which swap area is better
 	  for swapped-out pages presently. This will be valid only when we have 2
 	  or more swap areas in the system.
+
+config ZBUD
+	tristate
+	default n
+	help
+	  A special purpose allocator for storing compressed pages.
+	  It is designed to store up to two compressed pages per physical
+	  page.  While this design limits storage density, it has simple and
+	  deterministic reclaim properties that make it preferable to a higher
+	  density approach when reclaim will be used.
