@@ -145,7 +145,7 @@ struct zpool *zpool_create_pool(char *type, gfp_t gfp, struct zpool_ops *ops)
 	struct zpool_driver *driver;
 	struct zpool *zpool;
 
-	pr_info("creating pool type %s\n", type);
+	pr_debug("creating pool type %s\n", type);
 
 	driver = zpool_get_driver(type);
 
@@ -178,7 +178,7 @@ struct zpool *zpool_create_pool(char *type, gfp_t gfp, struct zpool_ops *ops)
 		return NULL;
 	}
 
-	pr_info("created %s pool\n", type);
+	pr_debug("created pool type %s\n", type);
 
 	spin_lock(&pools_lock);
 	list_add(&zpool->list, &pools_head);
@@ -200,7 +200,7 @@ struct zpool *zpool_create_pool(char *type, gfp_t gfp, struct zpool_ops *ops)
  */
 void zpool_destroy_pool(struct zpool *zpool)
 {
-	pr_info("destroying pool type %s\n", zpool->type);
+	pr_debug("destroying pool type %s\n", zpool->type);
 
 	spin_lock(&pools_lock);
 	list_del(&zpool->list);
