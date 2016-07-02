@@ -36,7 +36,11 @@ struct bsg_job;
 struct blkcg_gq;
 
 #define BLKDEV_MIN_RQ	4
+#ifdef CONFIG_ZEN_INTERACTIVE
+#define BLKDEV_MAX_RQ	16
+#else
 #define BLKDEV_MAX_RQ	128	/* Default maximum */
+#endif
 
 //enable storage pid log in user load
 #if !defined(FEATURE_STORAGE_PERF_INDEX) && defined(CONFIG_MT_ENG_BUILD)
