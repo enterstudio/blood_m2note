@@ -1,0 +1,4 @@
+# BLOOD
+==============
+
+BLOOD - custom kernel for MEIZU M2Note.

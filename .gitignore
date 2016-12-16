@@ -1,0 +1,6 @@
+build/
+out/
+.directory
+*.directory
+*.log
+*.zip
