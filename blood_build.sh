@@ -25,128 +25,127 @@ outpath=$kernelpath/out
 zipbuildpath=$outpath/zip
 toolchainpath=/opt/toolchain/UBERTC/aarch64-linux-android-5.3-kernel/bin/aarch64-linux-android-
 date=$(date +"%Y%m%d%H%M")
-model='m2note'
-arch='arm64'
-defconfig='blood_m2note_defconfig'
+model=m2note
+arch=arm64
+defconfig=blood_m2note_defconfig
 bloodver=.r2.0-L
 akscripts=$kernelpath/anykernel_blood
 zipname=BLOOD$bloodver-$model-$date.zip
-cputhreads=$(cat /proc/cpuinfo | grep processor | wc -l)
+cputhreads=$(grep -c ^processor /proc/cpuinfo)
 
 step1_parameters(){
-echo '======================================================================'
-echo ' '
-echo ' '
-echo ' '
-echo ' '
-echo '                          Kernel parameters:                          '
-echo ' '
-echo ' ZIP name: '$zipname' '
-echo ' Model: '$model' '
-echo ' Defconfig: '$defconfig' '
-echo ' Blood kernel version: '$bloodver' '
-echo ' Build date: '$date' '
-echo ' Host CPU threads: '$cputhreads' '
-echo ' '
-echo ' '
-echo ' '
-echo ' Kernel sources path: '$kernelpath' '
-echo ' Toolchain path: '$toolchainpath' '
-echo ' '
-echo ' '
-echo ' '
-echo ' '
-echo '======================================================================'
+  begin=$(date +"%s")
+  echo "======================================================================"
+  echo " "
+  echo " "
+  echo " "
+  echo " "
+  echo "                          Kernel parameters:                          "
+  echo " "
+  echo " ZIP name: $zipname "
+  echo " Model: $model "
+  echo " Defconfig: $defconfig "
+  echo " Blood kernel version: $bloodver "
+  echo " Build date: $date "
+  echo " Host CPU threads: $cputhreads "
+  echo " "
+  echo " "
+  echo " "
+  echo " Kernel sources path: $kernelpath "
+  echo " Toolchain path: $toolchainpath "
+  echo " "
+  echo " "
+  echo " "
+  echo " "
+  echo "======================================================================"
 }
 
 step2_clean(){
-echo 'Cleaning up directory...'
+  echo "Cleaning up directory..."
 
-if [ -d $buildpath ]
-then
-    rm -r $buildpath
-fi
+  if [ -d $buildpath ]
+  then
+      rm -r $buildpath
+  fi
 
-if [ -d $outpath ]
-then
-    rm -r $outpath
-fi
+  if [ -d $outpath ]
+  then
+      rm -r $outpath
+  fi
 }
 
 step3_setup(){
-echo 'Setting variables...'
-export ARCH=$arch
-export SUBARCH=$arch
-export CROSS_COMPILE=$toolchainpath
-export CONFIG=$defconfig
-export KERNEL=$kernelpath
-export BUILD=$buildpath
-export SOURCES=$sourcespath
-export OUT=$outpath
-export ZIPBUILD=$zipbuildpath
-STRIP=${CROSS_COMPILE}strip
+  echo "Setting variables..."
+  export ARCH=$arch
+  export SUBARCH=$arch
+  export CROSS_COMPILE=$toolchainpath
+  export CONFIG=$defconfig
+  export KERNEL=$kernelpath
+  export BUILD=$buildpath
+  export SOURCES=$sourcespath
+  export OUT=$outpath
+  export ZIPBUILD=$zipbuildpath
+  STRIP=${CROSS_COMPILE}strip
 }
 
 step4_compile(){
-echo 'Building kernel...'
-mkdir -p $SOURCES
-mkdir -p $ZIPBUILD
-mkdir -p $SOURCES/tmp/kernel
-mkdir -p $SOURCES/tmp/system/lib/modules
-make O=$SOURCES $CONFIG
-make -j$cputhreads O=$SOURCES | tee $OUT/build-$model-$date.log
+  echo "Building kernel..."
+  mkdir -p $SOURCES
+  mkdir -p $ZIPBUILD
+  make O=$SOURCES $CONFIG
+  make -j$cputhreads O=$SOURCES | tee $OUT/build-$model-$date.log
 
-if [ -f $SOURCES/arch/arm64/boot/Image.gz-dtb ]
-then
-    cp -f $SOURCES/arch/arm64/boot/Image.gz-dtb $OUT/zImage
-fi
+  if [ -f $SOURCES/arch/arm64/boot/Image.gz-dtb ]
+  then
+      cp -f $SOURCES/arch/arm64/boot/Image.gz-dtb $OUT/zImage
+  fi
 
-echo 'Kernel succesfully built!'
+  echo "Kernel succesfully built!"
 }
 
 step5_generateprop(){
-echo 'Generating prop file...'
-echo '# begin blood properties
-ro.blood.brand='$brand'
-ro.blood.device='$device'
-ro.blood.model='$model'
-ro.blood.version='$bloodver'
-ro.blood.build_date='$date'
-ro.blood.build_user='$(whoami)'
-ro.blood.build_host='$(uname -n)'
-# end blood properties' > $ZIPBUILD/blood.prop
+  echo "Generating prop file..."
+  echo "# begin blood properties
+ro.blood.model=$model
+ro.blood.version=$bloodver
+ro.blood.build_date=$date
+ro.blood.build_user=$(whoami)
+ro.blood.build_host=$(uname -n)
+# end blood properties" > $ZIPBUILD/blood.prop
 }
 
 step6_createzip(){
-echo 'Creating ZIP...'
-cp -r $akscripts/* $ZIPBUILD/
-cp -f $OUT/zImage $ZIPBUILD/zImage
-cd $ZIPBUILD
-zip -q -r -D -X $zipname ./*
+  echo "Creating ZIP..."
+  cp -r $akscripts/* $ZIPBUILD/
+  cp -f $OUT/zImage $ZIPBUILD/zImage
+  cd $ZIPBUILD
+  zip -q -r -D -X $zipname ./*
 }
 
 step7_cleanafter(){
-echo 'Cleaning after building...'
-mv $zipname $OUT/$zipname
+  echo "Cleaning after building..."
+  mv $zipname $OUT/$zipname
 
-if [ -d $SOURCES ]
-then
-    rm -r $SOURCES
-fi
+  if [ -d $SOURCES ]
+  then
+      rm -r $SOURCES
+  fi
 
-cd $OUT
+  cd $OUT
 
-if [ -d $ZIPBUILD ]
-then
-    rm -r $ZIPBUILD
-fi
+  if [ -d $ZIPBUILD ]
+  then
+      rm -r $ZIPBUILD
+  fi
 
-if [ -f zImage ]
-then
-    rm -r zImage
-fi
+  if [ -f zImage ]
+  then
+      rm -r zImage
+  fi
 
-cd $KERNEL
+  cd $KERNEL
+  end=$(date +"%s")
+  echo "Total time elapsed: $(echo $(($end-$begin)) | awk '{print int($1/60)"minutes "int($1%60)"seconds "}')"
 }
 
 step1_parameters;
