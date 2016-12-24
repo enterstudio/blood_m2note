@@ -2,3 +2,54 @@
 ==============
 
 BLOOD - custom kernel for MEIZU M2Note.
+
+# Features
+==============
+
+* Overclock to 1.495GHz
+* Support all custom ROMs based on AOSP
+* F2FS backported from Linux-4.4-rc1 and patched to Linux-4.9
+* ZRAM backported from Linux-3.10 and patched to Linux-3.18
+* exFAT driver 
+* KSM support
+* UKSM support
+* Governors:
+  `perfomance`;
+  `powersave`;
+  `userspace`;
+  `ondemand`;
+  `interactiveplus`;
+  `darkness`;
+  `interactive`;
+  `intelliactive`;
+  `bioshock`;
+  `conservative`.
+* I/O shedulers:
+  `noop`;
+  `deadline`;
+  `row`;
+  `sio`;
+  `zen`;
+  `bfq`;
+  `cfq`;
+  `sioplus`;
+  `fiops`.
+* TCP Congestion Control Algorithms:
+  `advanced`;
+  `bic`;
+  `cdg`;
+  `cubic`;
+  `westwood`;
+  `htcp`;
+  `hstcp`;
+  `hybla`;
+  `vegas`;
+  `scalable`;
+  `lp`;
+  `veno`;
+  `yeah`;
+  `illinois`;
+* Compiled with UBERTC 5.4.1 from [here](https://bitbucket.org/mdalexca/aarch64-linux-android-5.x)
+* AnyKernel2 installer
+
+
