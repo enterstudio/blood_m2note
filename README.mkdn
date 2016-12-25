@@ -33,7 +33,8 @@ BLOOD - custom kernel for MEIZU M2Note.
   `bfq`;
   `cfq`;
   `sioplus`;
-  `fiops`.
+  `fiops`
+  `tripndroid`.
 * TCP Congestion Control Algorithms:
   `advanced`;
   `bic`;
@@ -52,7 +53,7 @@ BLOOD - custom kernel for MEIZU M2Note.
 * Compiled with UBERTC 5.4.1 from [here](https://bitbucket.org/mdalexca/aarch64-linux-android-5.x)
 * AnyKernel2 installer
 
-# Getting the latest build
+# Download
 ==============
 
 |Download link|Downloads number|
