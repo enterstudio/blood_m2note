@@ -18,4 +18,7 @@ on boot
    write /sys/block/mmcblk1/queue/scheduler fiops
    write /sys/block/mmcblk1/queue/read_ahead_kb 512
 
+   # Enable laptop mode
+   write /proc/sys/vm/laptop_mode 1
+
 
