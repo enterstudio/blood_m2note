@@ -222,6 +222,13 @@ dump_boot;
 backup_file init.mt6735.rc
 insert_line init.mt6735.rc "init.blood.rc" after "import init.modem.rc" "import init.blood.rc";
 
+backup_file ueventd.rc;
+insert_line ueventd.rc "frandom" after "urandom" "/dev/frandom              0666   root       root\n";
+insert_line ueventd.rc "erandom" after "urandom" "/dev/erandom              0666   root       root\n";
+backup_file file_contexts;
+insert_line file_contexts "frandom" after "urandom" "/dev/frandom		u:object_r:frandom_device:s0\n";
+insert_line file_contexts "erandom" after "urandom" "/dev/erandom		u:object_r:erandom_device:s0\n";
+
 cmdfile=`ls $split_img/*-cmdline`;
 cmdtmp=`cat $cmdfile`;
 case "$cmdtmp" in
