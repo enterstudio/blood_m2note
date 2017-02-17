@@ -6,7 +6,7 @@
 kernel.string=BLOOD by AlexLartsev19 @ github.com
 do.devicecheck=1
 do.initd=0
-do.modules=0
+do.modules=1
 do.cleanup=1
 
 # Device Names
