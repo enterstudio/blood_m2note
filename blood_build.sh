@@ -120,7 +120,9 @@ ro.blood.build_user=$KBUILD_BUILD_USER
 ro.blood.build_host=$KBUILD_BUILD_HOST
 # end blood properties" > $ZIPDIR/blood.prop
   cp -r $KERNELDIR/anykernel_blood/* $ZIPDIR/
+  cp -r $(find -name '*.ko') $ZIPDIR/modules/
   cd $ZIPDIR
+  find . -name placeholder -delete
   zip -q -r -D -X $ZIP ./*
   mv $ZIPDIR/$ZIP $OUTDIR/$ZIP
   end=$(date +"%s")
