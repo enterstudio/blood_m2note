@@ -31,7 +31,7 @@ function step1_setup(){
   export ARCH=arm64
   export SUBARCH=arm64
   export CONFIG=blood_m2note_defconfig
-  export VERSION=.r3.0-N
+  export VERSION=.r4.0-N
   export CROSS_COMPILE=/opt/toolchain/UBERTC/aarch64-linux-android-5.x/bin/aarch64-linux-android-
   STRIP=${CROSS_COMPILE}strip
   # Zip
