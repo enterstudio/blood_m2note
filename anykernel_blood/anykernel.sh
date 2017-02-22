@@ -215,7 +215,9 @@ patch_fstab() {
 }
 
 # Installation Proccess
-chmod -R 755 $ramdisk
+chmod 750 $ramdisk/init.blood.rc
+chmod 775 $ramdisk/sbin
+chmod 755 $ramdisk/sbin/busybox
 
 dump_boot;
 
