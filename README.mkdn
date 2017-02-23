@@ -7,7 +7,7 @@ BLOOD - custom kernel for MEIZU M2Note.
 ==============
 
 * Linux 3.10.104
-* Overclock to 1495MHz
+* Stock frequences
 * Support all custom ROMs based on AOSP
 * F2FS backported from Linux-4.4-rc1 and patched to Linux-4.10-rc1
 * ZRAM backported from Linux-3.10 and patched to Linux-3.18
@@ -22,8 +22,8 @@ BLOOD - custom kernel for MEIZU M2Note.
   `userspace`;
   `ondemand`;
   `interactiveplus`;
-  `darkness(by default)`;
-  `interactive`;
+  `darkness`;
+  `interactive(by default)`;
   `intelliactive`;
   `wheatley`;
   `bioshock`;
