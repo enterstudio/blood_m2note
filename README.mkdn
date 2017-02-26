@@ -1,18 +1,19 @@
 # BLOOD
 ==============
 
-BLOOD - custom kernel for MEIZU M2Note.
+BLOOD - custom kernel for MEIZU M2 Note
 
 # Features
 ==============
 
-* Linux 3.10.104
+* Linux 3.10.105
 * Stock frequences
 * Support all custom ROMs based on AOSP
 * F2FS backported from Linux-4.4-rc1 and patched to Linux-4.10-rc1
 * ZRAM backported from Linux-3.10 and patched to Linux-3.18
 * Random driver backported from Linux-4.1.31
-* exFAT driver 
+* SDCARDFS
+* exFAT driver
 * KSM & UKSM
 * VNSWAP
 * XBOX controller support
@@ -26,6 +27,7 @@ BLOOD - custom kernel for MEIZU M2Note.
   `interactive(by default)`;
   `intelliactive`;
   `wheatley`;
+  `thunderx`;
   `bioshock`;
   `conservative`.
 * I/O schedulers:
