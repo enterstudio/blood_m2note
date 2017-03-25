@@ -39,11 +39,16 @@ getprop() {
   test -e /sbin/getprop && /sbin/getprop $1 || file_getprop /default.prop $1;
 }
 
+cleanup() {
+  rm -rf /tmp/anykernel;
+}
+
 abort() {
   ui_print "$*"; exit 1;
 }
 
 show_progress 1.34 4;
+cleanup;
 mkdir -p /tmp/anykernel/bin;
 cd /tmp/anykernel;
 unzip -o "$ZIP";
@@ -99,15 +104,6 @@ if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.devicecheck)" == 1 ]; then
   fi;
 fi;
 
-if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.initd)" == 1 ]; then
-  ui_print "- Creating init.d...";
-  ui_print " ";
-  if [ ! -d /system/etc/init.d ]; then
-    mkdir -p /system/etc/init.d;
-  fi;
-  set_perm_recursive 0 0 0755 0755 /system/etc/init.d;
-fi;
-
 ui_print "- Installing kernel...";
 ui_print " ";
 /sbin/sh /tmp/anykernel/anykernel.sh;
@@ -116,8 +112,12 @@ if [ "$(cat /tmp/anykernel/exitcode)" == 1 ]; then
     umount "$m"
   done
   abort;
-else
-  cp -f /tmp/anykernel/blood.prop /system/blood.prop
+fi;
+
+if [ -f /tmp/anykernel/blood.prop ]; then
+  ui_print "- Pushing BLOOD properties...";
+  ui_print " ";
+  cp -rf /tmp/anykernel/blood.prop /system/blood.prop
   set_perm 0 0 644 /system/blood.prop
 fi;
 
@@ -133,9 +133,9 @@ if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.modules)" == 1 ]; then
 fi;
 
 if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanup)" == 1 ]; then
-  ui_print "- Cleaning..."
+  ui_print "- Cleaning...";
   ui_print " ";
-  rm -rf /tmp/anykernel;
+  cleanup;
 fi;
 
 ui_print "- Unmounting $mounts..."
