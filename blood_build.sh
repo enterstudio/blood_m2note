@@ -2,7 +2,7 @@
 #
 # BLOOD build script
 #
-# Copyright (C) 2016 @AlexLartsev19
+# Copyright (C) 2016-2017 @AlexLartsev19
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,6 +21,10 @@
 function step1_setup(){
   echo "Setting building environment..."
   begin=$(date +"%s")
+  # Host
+  export KBUILD_BUILD_USER=$(whoami)
+  export KBUILD_BUILD_HOST=$(uname -n)
+  export THREADS=$(grep -c ^processor /proc/cpuinfo)
   # Dirs
   export KERNELDIR=$(pwd)
   export BUILDDIR=$KERNELDIR/build
@@ -31,17 +35,21 @@ function step1_setup(){
   export ARCH=arm64
   export SUBARCH=arm64
   export CONFIG=blood_m2note_defconfig
-  export VERSION=.r5.0-N
+  export BRANCH=$(git symbolic-ref --short HEAD)
+  export VERSION=.r5.0-$BRANCH
+  if [ $KBUILD_BUILD_USER == alexlartsev19 ]
+  then
+    export BUILDSTATUS=OFFICIAL
+  else
+    export BUILDSTATUS=UNOFFICIAL
+  fi
+  export LOCALVERSION=BLOOD$VERSION-$BUILDSTATUS
   export CROSS_COMPILE=/opt/toolchain/UBERTC/aarch64-linux-android-5.x/bin/aarch64-linux-android-
   STRIP=${CROSS_COMPILE}strip
   # Zip
   export MODEL=m2note
   export DATE=$(date +"%Y%m%d%H%M")
-  export ZIP=BLOOD$VERSION-$MODEL-$DATE.zip
-  # Host
-  export KBUILD_BUILD_USER=$(whoami)
-  export KBUILD_BUILD_HOST=$(uname -n)
-  export THREADS=$(grep -c ^processor /proc/cpuinfo)
+  export ZIP=BLOOD$VERSION-$MODEL-$DATE-$BUILDSTATUS.zip
 }
 
 function step2_preparation(){
@@ -58,9 +66,8 @@ function step2_preparation(){
   echo " "
   echo " Architecture: $ARCH "
   echo " Defconfig: $CONFIG "
-  echo " Version: $VERSION "
+  echo " Version: $LOCALVERSION "
   echo " Toolchain: $CROSS_COMPILE "
-  echo " Zip: $OUTDIR/$ZIP "
   echo " Username: $KBUILD_BUILD_USER "
   echo " Hostname: $KBUILD_BUILD_HOST "
   echo " Host threads: $THREADS "
@@ -73,7 +80,7 @@ function step2_preparation(){
   echo " "
   echo " "
   echo " "
-  echo "Preparations for building"
+  echo "Preparations for building..."
 
   if [ -d $BUILDDIR ]
   then
@@ -101,7 +108,8 @@ function step3_building(){
   then
       echo " "
       echo "Building kernel failed!"
-  else
+  elif [ -f $SOURCESDIR/arch/$ARCH/boot/Image.gz-dtb ]
+  then
       mv $SOURCESDIR/arch/$ARCH/boot/Image.gz-dtb $ZIPDIR/zImage
       echo " "
       echo "Kernel succesfully built!"
@@ -114,15 +122,22 @@ function step4_zipit(){
   echo "Creating ZIP..."
   echo "# begin blood properties
 ro.blood.model=$MODEL
-ro.blood.version=$VERSION
+ro.blood.version=$LOCALVERSION
 ro.blood.build_date=$DATE
 ro.blood.build_user=$KBUILD_BUILD_USER
 ro.blood.build_host=$KBUILD_BUILD_HOST
 # end blood properties" > $ZIPDIR/blood.prop
   cp -r $KERNELDIR/anykernel_blood/* $ZIPDIR/
-  cp -r $(find -name '*.ko') $ZIPDIR/modules/
+  cp -r $KERNELDIR/README.mkdn $ZIPDIR/README.mkdn
+  if [ -f $(find -name '*.ko') ]
+  then
+      cp -r $(find -name '*.ko') $ZIPDIR/modules/
+  fi
   cd $ZIPDIR
-  find . -name placeholder -delete
+  if [ -f $(find . -name placeholder) ]
+  then
+      rm -rf $(find . -name placeholder)
+  fi
   zip -q -r -D -X $ZIP ./*
   mv $ZIPDIR/$ZIP $OUTDIR/$ZIP
   end=$(date +"%s")
