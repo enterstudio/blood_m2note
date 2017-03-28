@@ -1,22 +1,22 @@
 # BLOOD
-==============
 
 BLOOD - custom kernel for MEIZU M2 Note
 
 # Features
-==============
 
 * Linux 3.10.105
 * Stock frequences
 * Support all custom ROMs based on AOSP
-* F2FS backported from Linux-4.4-rc1 and patched to Linux-4.10-rc1
-* ZRAM backported from Linux-3.10 and patched to Linux-3.18
+* F2FS backported from Linux-4.4-rc1 and patched to Linux-4.11-rc1
+* ZRAM backported from Linux-3.10 and patched to Linux-3.15
 * Random driver backported from Linux-4.1.31
-* SDCARDFS
-* exFAT driver
+* SDCARDFS support
+* exFAT support
 * KSM & UKSM
 * VNSWAP
 * XBOX controller support
+* Zen Interactive tunings backported from Zen 4.5
+* Some patches from Linux upstream/CAF
 * Governors:
   `perfomance`;
   `powersave`;
@@ -32,10 +32,11 @@ BLOOD - custom kernel for MEIZU M2 Note
   `conservative`.
 * I/O schedulers:
   `noop`;
-  `deadline(by default)`;
+  `deadline`;
   `row`;
   `sio`;
   `zen`;
+  `vr(by default)`;
   `bfq`;
   `cfq`;
   `sioplus`;
