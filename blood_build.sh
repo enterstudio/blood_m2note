@@ -36,7 +36,7 @@ function step1_setup(){
   export SUBARCH=arm64
   export CONFIG=blood_m2note_defconfig
   export BRANCH=$(git symbolic-ref --short HEAD)
-  export VERSION=.r5.0-$BRANCH
+  export VERSION=.r6.0-$BRANCH
   if [ $KBUILD_BUILD_USER == alexlartsev19 ]
   then
     export BUILDSTATUS=OFFICIAL
