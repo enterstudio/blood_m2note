@@ -3,18 +3,9 @@
 # Modified by AlexLartsev19 @ github.com
 
 # Simple Settings
-kernel.string=BLOOD by AlexLartsev19 @ github.com
 do.devicecheck=1
-do.initd=0
 do.modules=1
 do.cleanup=1
-
-# Device Names
-device.name1=m2note
-device.name2=M2Note
-device.name3=
-device.name4=
-device.name5=
 
 # Advanced Settings
 if [ -e /dev/block/platform/mtk-msdc.0/by-name/boot ]; then
@@ -113,7 +104,7 @@ write_boot() {
 }
 
 backup_file() {
-  cp $1 $1~;
+  test ! -f $1~ && cp $1 $1~;
 }
 
 replace_string() {
@@ -239,4 +230,3 @@ case "$cmdtmp" in
 esac;
 
 write_boot;
-
